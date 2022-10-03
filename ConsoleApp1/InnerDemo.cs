@@ -19,15 +19,26 @@ class InnerDemo
             new Address(){Id=4,Line="four"},
         };
 
+        var marks = new List<Mark>()
+        {
+            new Mark(){Id=1,studentId=1,TMarks=70},
+            new Mark(){Id=2,studentId=2,TMarks=90},
+            new Mark(){Id=3,studentId=3,TMarks=80},
+            new Mark(){Id=4,studentId=4,TMarks=80},
+        };
+
         var qs = (from s in students
                   join a in address
                   on s.AddressId equals a.Id
+                  join m in marks
+                  on s.StudentId equals m.studentId
                   select new
                   {
                       Id = a.Id,
                       Line = a.Line,
                       FullName = s.FullName,
                       Semail = s.Semail,
+                      Marks = m.TMarks
 
                   }).ToList();
 
@@ -35,12 +46,22 @@ class InnerDemo
         //
 
         var ms = students.Join(address, std => std.AddressId,
-            addr => addr.Id, (std, addr) => new
+            addr => addr.Id,
+            (std, addr) => new
             {
-                FullName = std.FullName,
-                AddressId = std.AddressId,
-                Line = addr.Line,
-            }).ToList();
+                std,
+                addr
+            }).Join(marks, student => student.std.StudentId, mark => mark.studentId,
+            (student, mark) => new { student, mark })
+
+            .Select(x => new
+            {
+                FullName = x.student.std.FullName,
+                AddressId = x.student.std.AddressId,
+                Line = x.student.addr.Line,
+                Marks=x.mark.TMarks
+            }).
+           ToList();
 
         //students=outer data source
         //address=inner data source
@@ -69,4 +90,11 @@ class StudentJoin
     public string FullName { get; set; }
     public string Semail { get; set; }
     public int AddressId { get; set; }
+}
+
+class Mark
+{
+    public int Id { get; set; }
+    public int studentId { get; set; }
+    public int TMarks { get; set; }
 }

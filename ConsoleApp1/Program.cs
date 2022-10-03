@@ -22,9 +22,12 @@ Console.WriteLine("Hello, World!");
 //PagingDemo demo = new PagingDemo();
 //demo.Test();
 //PagingDemo.Test();
-InnerDemo demo=new InnerDemo();
+//InnerDemo demo=new InnerDemo();
+//GroupDemo demo = new GroupDemo();
+//LeftJoin demo = new LeftJoin();
+//ElementAtDemo demo = new ElementAtDemo(); 
+FirstDefault demo = new FirstDefault();
 demo.Test();
-
 
 
 Console.ReadLine();
